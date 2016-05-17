@@ -37,6 +37,7 @@ LOG=$LVAR/pistream.log
 PID=$LVAR/pistream.pid
 
 # user info
+
 PISTREAM_USER=pi
 
 d_start() {
@@ -78,7 +79,12 @@ d_start() {
 
         # open the stream
 
-        exec su PISTREAM_USER -l -c "nohup raspivid -o - -t 0 -w $WIDTH -h $HEIGHT -fps $FPS -g $KEYFRAMES -b $BITRATE | ffmpeg -re -ar 44100 -ac 2 -acodec pcm_s16le -f s16le -ac 2 -i /dev/zero -f h264 -i - -vcodec copy -acodec aac -ab 128k -r $FPS -g $KEYFRAMES -strict experimental -f flv $URL & echo \$! > $PID"
+        exec su PISTREAM_USER -l -c "nohup raspivid -o - -t 0 -w $WIDTH \
+         -h $HEIGHT -fps $FPS -g $KEYFRAMES -b $BITRATE | \ 
+         ffmpeg -re -ar 44100 -ac 2 -acodec pcm_s16le -f s16le \ 
+         -ac 2 -i /dev/zero -f h264 -i - -vcodec copy -acodec aac \
+          -ab 128k -r $FPS -g $KEYFRAMES -strict experimental \ 
+          -f flv $URL & echo \$! > $PID"
 }
 
 d_stop() {

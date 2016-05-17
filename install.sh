@@ -1,6 +1,6 @@
 HOSTNAME=pistreamer
 STREAMING_USER=pi
-YOUTUBELIVE_KEY=your key goes here
+YOUTUBELIVE_KEY=p9g3-f17p-j722-1d70
 
 # change the root password
 
@@ -53,11 +53,14 @@ git clone git://source.ffmpeg.org/ffmpeg.git ffmpeg
 
 cd ffmpeg
 
-./configure --prefix="/usr/local/ffmpeg" --pkg-config-flags="--static" --bindir="/usr/local/bin" --enable-gpl --enable-libx264
+./configure --prefix="/usr/local/ffmpeg" --pkg-config-flags="--static" \
+ --bindir="/usr/local/bin" --enable-gpl --enable-libx264
 
 sudo make
 sudo make install
 sudo make distclean
+
+cd ~
 
 # create the var and etc directories for our streaming
 
@@ -67,5 +70,12 @@ sudo chown $STREAMING_USER.$STREAMING_USER /var/local/pistream
 sudo mkdir /usr/local/etc/pistream
 sudo chown $STREAMING_USER.$STREAMING_USER /usr/local/etc/pistream
 
-# create the service script and register it
+# grab the service script and register it
 
+git clone https://www.github.com/cmberryau/pistream
+
+cd pistream
+
+sudo cp pistream.sh /etc/init.d/pistream
+sudo chown 755 /etc/init.d/pistream
+sudo update-rc.d pistream defaults
